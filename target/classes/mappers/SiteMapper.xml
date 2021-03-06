@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.SiteMapper">
+	
+	<select id="selectSiteMenuList" resultType="SiteMenuVO">
+	        SELECT	siteCode,
+	        			title,
+	        			adminName
+	        			
+	        FROM site_table
+	        WHERE 1=1
+	        <!-- start 레코드부터 size값만큼 레코드를 뽑아냄 -->
+	        
+	        <if test="searchCnd == null" >
+				<![CDATA[	AND	(title LIKE CONCAT ('%', #{searchWrd},'%') OR adminName LIKE CONCAT ('%', #{searchWrd},'%') )  ]]>
+			</if>
+		    <if test="searchCnd == 0" >
+				<![CDATA[	AND	title LIKE CONCAT('%',#{searchWrd} ,'%')  ]]>
+			</if>
+			<if test="searchCnd == 1" >
+				<![CDATA[	AND	adminName LIKE CONCAT('%',#{searchWrd} ,'%')  ]]>
+			</if>
+			
+			
+	        ORDER BY frstRegistPnttm DESC,  siteCode DESC
+	        LIMIT #{pageIndex}, #{recordCountPerPage} 
+	        
+    </select>
+
+	<select id="lookSiteMenuCnt" resultType="int">
+	        SELECT count(siteCode)
+	        FROM site_table
+	        WHERE 1=1
+	        
+	       <if test="searchCnd == null" >
+				<![CDATA[	AND	(title LIKE CONCAT ('%', #{searchWrd},'%') OR adminName LIKE CONCAT ('%', #{searchWrd},'%') )  ]]>
+			</if>
+		    <if test="searchCnd == 0" >
+				<![CDATA[	AND	title LIKE CONCAT('%',#{searchWrd} ,'%')  ]]>
+			</if>
+			<if test="searchCnd == 1" >
+				<![CDATA[	AND	adminName LIKE CONCAT('%',#{searchWrd} ,'%')  ]]>
+			</if>
+	        
+    </select>
+    
+    <select id="selectSiteMenuRecent" resultType="SiteMenuVO">
+	        SELECT *
+	        FROM site_table
+       		ORDER BY siteCode DESC
+       		LIMIT 1
+	        
+	</select>
+    
+    
+    <select id="selectSiteMenuMax" resultType="String">
+	        SELECT max(siteCode)
+	        FROM site_table
+	 </select>
+
+	<select id="lookSiteMenuOne" resultType="SiteMenuVO">
+	        SELECT 
+	        	siteCode,
+	        	title,
+	        	noticeSwitch,
+	        	formCode,
+	        	adminName,
+	        	typeName,
+	        	templateType,
+	        	placeRow,
+	        	placeName,
+	        	placeWidth
+	        	
+	        FROM site_table
+	        WHERE siteCode = #{siteCode}
+    </select>
+    
+    <select id="selectSiteMenuFormList" resultType="FormMenuVO">
+    
+    		SELECT		formCode,
+	        				formName
+	        			
+	        FROM FORM_TABLE
+    
+    </select>
+    
+    <select id="selectSiteField" resultType="SiteMenuVO">
+    
+    		SELECT COLUMN_NAME
+			FROM Information_schema.columns
+			WHERE table_name = 'tb_${siteCode}'
+	        
+	        
+	        <if test="fieldNumber != '' and fieldNumber != null">
+
+		        AND ORDINAL_POSITION IN
+		        <foreach item="item" index="index" collection="fieldNumber"  open="(" close=")"  separator="," >
+				        ${item}
+				</foreach>
+			
+			</if>
+			
+			ORDER BY ORDINAL_POSITION
+    
+    </select>
+
+	<insert id="insertSiteMenu">
+		 
+			INSERT INTO SITE_TABLE (
+				siteCode,
+				title,
+				adminName,
+				formCode,
+				templateType,
+				placeRow,
+				placeWidth,
+				frstRegistPnttm
+				
+			) VALUES (
+				#{siteCode},
+				#{title},
+				#{adminName},
+				#{formCode},
+				#{templateType},
+				#{placeRow},
+				#{placeWidth},
+				now()
+			) 
+		
+	</insert>
+	
+	<update id="insertSiteTable">
+	
+		CREATE TABLE tb_${siteCode} (
+				`code` VARCHAR(20) NOT NULL COMMENT '코드명은 ???',
+				`title` VARCHAR(250) NULL DEFAULT NULL COMMENT '제목',
+				`context` LONGTEXT NULL COMMENT '내용',
+				`atchFileId` VARCHAR(20) NULL COMMENT '첨부파일',
+				`writerID` VARCHAR(50) NULL DEFAULT NULL COMMENT '작성자 ID',
+				`frstRegistPnttm` DATETIME NULL DEFAULT NULL COMMENT '최초 게시물 작성시간',
+				`frstRegistNm` VARCHAR(50) NULL DEFAULT NULL COMMENT '최초 게시물 작성자',
+				`lastUpdtPnttm` DATETIME NULL DEFAULT NULL COMMENT '최종 게시물 수정시간',
+				`lastUpdtNm` VARCHAR(50) NULL DEFAULT NULL COMMENT '최종 게시물 수정자',
+				PRIMARY KEY (`CODE`)
+			)
+			COMMENT='사이트관리 >> 게시판관리 >> ${siteCode} >> 생성된 테이블\r\n'
+	
+	</update>
+	
+	<update id="updateSiteMenu">
+		 
+		UPDATE	SITE_TABLE
+			
+		SET
+			title = #{title}
+			,adminName=#{adminName}
+			,formCode = #{formCode}
+			,noticeSwitch = #{noticeSwitch}
+			,templateType  = #{templateType}
+			,placeRow  = #{placeRow}
+			,placeWidth  = #{placeWidth}
+			,lastUpdtPnttm=now()
+			
+		WHERE siteCode = #{siteCode}
+		
+	</update>
+	
+	<!-- 필드의 표시항목을 변경하는 sql문 -->
+	<update id="updateSiteField">
+		UPDATE site_table SET
+			placeName = #{placeName}
+		WHERE siteCode = #{siteCode}
+	</update>
+	
+	<update id="deleteSiteTableDelete">
+			DROP TABLE tb_${siteCode}
+	</update>
+	
+	<delete id="deleteSiteMenu">
+		 
+			DELETE FROM SITE_TABLE
+			WHERE siteCode = #{siteCode}
+		
+	</delete>
+
+</mapper>

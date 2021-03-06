@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<tx:annotation-driven proxy-target-class="true"/>
+	
+	  <!-- 메일보내기 -->
+   <bean id="mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.gmail.com" />
+      <property name="port" value="587" />
+      <property name="username" value="wjdduf4439@eplatform.co.kr" />
+      <property name="password" value="dl!wjd2duf" />
+      <property name="javaMailProperties">
+         <props>
+               <prop key="mail.transport.protocol">smtp</prop>
+               <prop key="mail.smtp.auth">true</prop>
+               <prop key="mail.smtp.starttls.enable">true</prop>
+               <prop key="mail.debug">true</prop>
+         </props>
+      </property>
+ 
+   </bean>
+	
+	<!-- 해당 dbms에 접속하여 로그인하는 코드 : DriverManagerDataSource -->
+	<bean id="dataSource"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/estore?useSSL=false&amp;serverTimezone=UTC"> </property>
+        <property name="username" value="root"></property>
+        <property name="password" value="dl!wjd2duf"></property>
+    </bean>     
+    
+    <!-- mybatis를 이용하여 해당 쿼리문에 매핑하는 구문 : SqlSessionFactoryBean -->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	 	 <!-- DB에 접속 하기 위해서 설정 -->
+        <property name="dataSource"  ref="dataSource" />
+        <!-- myBatis 기본 설정 -->
+        <property name="configLocation" value="classpath:/mybatis-config.xml"></property>  <!-- 마이바티스 XML설정파일의 위치를 지정하기 위해 사용됨 -->
+        <property name="mapperLocations" value="classpath:/mappers/*.xml"></property> <!-- mapperLocations프로퍼티는 매퍼에 관련된 자원의 위치를 나열한다. dao를 등록하는 구간 -->
+    </bean>
+    
+    	<!-- 마이바티스 스프링 연동모듈의 핵심 -->
+    	<!-- SqlSessionTemplate은 SqlSession을 구현하고 코드에서 SqlSession를 대체하는 역할을 한다. SqlSessionTemplate 은 쓰레드에 안전하고 여러개의 DAO나 매퍼에서 공유할수 있다. -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> 
+    	<!-- 모든 마이바티스 애플리케이션은 SqlSessionFactory 인스턴스를 사용한다. -->
+    	<!-- 실질적으로 mybatis와 mysql을 연동해주는 객체 -->
+	  <constructor-arg index="0" name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+		
+</beans>

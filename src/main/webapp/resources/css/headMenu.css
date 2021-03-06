@@ -1,0 +1,70 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+#topMenu{	
+			
+			height: 30px;
+				
+		}
+#topMenu ul li {	
+					list-style: none;
+					color: white;
+					background-color: #2d2d2d; 
+					float: left;
+					width:100px;
+					line-height: 30px;
+					vertical-align: middle;
+					text-align: center; 
+				}
+#topMenu .menuLink {	
+						text-decoration:none;
+						color: white;
+						display: block;
+						font-size: 12px;
+						font-weight: bold;
+						font-family: "Trebuchet MS", Dotum, Arial;		
+					}
+#topMenu .menuLink:hover{	
+							color: red;
+							background-color: #4d4d4d;
+						}
+						
+.sub-menu{
+	
+			visibility: hidden;
+			list-style: none;
+			color: white;
+			position: absolute;
+			margin-top:30px;
+			float: left;
+			display: block;
+			line-height: 30px;
+			vertical-align: middle;
+			text-align: center;
+			padding-left:0px;	
+	
+			}
+
+.sub-menu ol{
+	
+			background-color: #2d2d2d; 
+			text-decoration:none;
+			color: white;
+			display: block;
+			font-size: 12px;
+			font-weight: bold;
+			font-family: "Trebuchet MS", Dotum, Arial;
+			width:100px;
+			background-clip: content-box;
+			padding-left:0px;	
+
+
+			}	
+			
+.sub-menu ol:hover{	
+						color: red;
+						background-color: #4d4d4d;
+						background-clip: content-box;
+				}					
+												
