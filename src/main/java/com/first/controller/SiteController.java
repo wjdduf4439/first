@@ -92,6 +92,8 @@ public class SiteController {
 	@RequestMapping(value = "/site/siteUpdate.go")
 	public String siteAdminUpdate(ModelMap map, @ModelAttribute("searchVO")SiteMenuVO siteMenuVO) throws Exception {
 		
+		System.out.println("ÇöÀç width" + siteMenuVO.getPlaceWidth());
+		
 		siteService.updateSiteMenu(siteMenuVO);
 		
 		this.siteMakeTable(siteMenuVO);

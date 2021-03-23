@@ -20,10 +20,13 @@ $( document ).ready(function() {
 		var placeWidthStr = "${resultList.placeWidth}";
 		var placeWidthArray = placeWidthStr.split(",");
 		
+		console.log(placeRowArray[0]);
+		console.log(placeWidthArray[0]);
+		
 		var template = '';
-		for(var i = 0; i < placeRowArray.length; i++){
+		for(var i = Number(placeRowArray[0]); i < Number(placeRowArray[0]) + placeRowArray.length; i++){
 			
-			template += '<input  type="number" id="placeWidthOption'+placeRowArray[i]+'" name="placeWidthOption'+placeRowArray[i]+'" class ="width150" value="" placeholder="속성'+(i+1)+'" /></br>';
+			template += '<input  type="number" id="placeWidthOption'+i+'" name="placeWidthOption'+i+'" class ="width150" value="" placeholder="속성'+i+'" /></br>';
 			
 		}
 		
@@ -177,15 +180,28 @@ function fn_insert(){
 	
 	
 	var placeWidthVal = '';
-	for(var i = 0; i < $("input:checkbox[name=placeRow]:checked").length; i++){
+	
+	$("input:checkbox[name=placeRow]:checked").each(function() {
+
+		placeWidthVal += $('#placeWidthOption'+this.value+'').val();
+		placeWidthVal += ',';
+
+	});
+	
+	/*for(var i = 0; i < $("input:checkbox[name=placeRow]:checked").length; i++){
 		
 		placeWidthVal += $('#placeWidthOption'+i+'').val();
 		placeWidthVal += ',';
 		
-	}
+	}*/
+	
 	placeWidthVal = placeWidthVal.substring(0,placeWidthVal.length-1);
 	$('#placeWidth').val(placeWidthVal);
 	
+	/*alert($('#placeWidth').val());
+	
+	return;
+	*/
 	
 	if(fn_validate() == false) { return;}
 	
