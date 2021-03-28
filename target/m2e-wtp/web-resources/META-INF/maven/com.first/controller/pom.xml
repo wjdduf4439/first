@@ -287,11 +287,7 @@
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
-                    <archive>
-                    	<manifest>
-                    		<mainClass>com.first.controller.SiteController</mainClass>	
-                    	</manifest>
-                    </archive>
+                    <mainClass>com.first.controller.SiteController</mainClass>
 				    
                 </configuration>
           
