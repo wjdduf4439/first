@@ -317,7 +317,7 @@
 		      <configuration>
 		        <archive>
 		          <manifest>
-		            <mainClass>com.first.controller.SiteController</mainClass>
+		            <mainClass>com.first.controller.TemplateInfoController</mainClass>
 		            </manifest>
 		          </archive>
 		        </configuration>
@@ -328,7 +328,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.first.controller.SiteController</mainClass>
+                    <mainClass>com.first.controller.TemplateInfoController</mainClass>
                 </configuration>
             </plugin>
         </plugins>

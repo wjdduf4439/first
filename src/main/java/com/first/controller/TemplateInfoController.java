@@ -16,6 +16,10 @@ public class TemplateInfoController {
 	@Resource(name ="TemplateInfoService")
 	private TemplateInfoService templateInfoService; //해당 뷰의 상위 서비스
 	
+	public static void main( String[] args ) {
+        System.out.println( "Hello World!" );
+    }
+	
 	@RequestMapping("/template/templateInfo.go")
 	public String templeteInfo(@ModelAttribute("searchVO") TemplateInfoVO templateInfoVO ,ModelMap map) throws Exception {
 		
